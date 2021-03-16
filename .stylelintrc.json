@@ -1,0 +1,16 @@
+{
+  "extends": "stylelint-config-recommended-scss",
+  "rules": {
+    "indentation": 2,
+    "scss/at-rule-no-unknown": [ true, {
+      "ignoreAtRules": [
+        "extends",
+        "apply",
+        "tailwind",
+        "components",
+        "utilities",
+        "screen"
+      ]
+    }]
+  }
+}
