@@ -2,10 +2,67 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@mixin hover-active($color) {
+  background-color: $color;
+  &:hover {
+    background-color: lighten($color, 10%);
+  }
+  &:active {
+    background-color: darken($color, 10%);
+  }
+}
+
 html, body, #root {
-  margin: 0;
-  @apply h-full;
+  @apply h-full m-0;
 }
 
 #root {
+}
+
+.calculator {
+  @apply flex flex-col;
+  max-width: 480px;
+  background: linear-gradient(180deg, #84BAFF, #0B0E1C);
+
+  &-screen {
+    height: 100px;
+  }
+
+  &-body {
+    @apply flex items-center;
+  }
+
+  &-col {
+    @apply flex flex-wrap;
+    &-cell {
+      @apply flex-shrink-0 p-1;
+    }
+    &:first-child {
+      .calculator-col-cell {
+        flex-basis: 33%;
+      }
+    }
+    &:last-child {
+      .calculator-col-cell {
+        flex-basis: 100%;
+      }
+    }
+  }
+
+  &-button {
+    @apply w-12 h-12 text-center rounded-full;
+    outline: none !important;
+    &.gray {
+      @include hover-active(#AFAFAFAF);
+      color: black;
+    }
+    &.blue {
+      @include hover-active(#3091FD);
+      color: white;
+    }
+    &.black {
+      @include hover-active(#333333);
+      color: white;
+    }
+  }
 }

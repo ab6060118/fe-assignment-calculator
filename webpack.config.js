@@ -30,8 +30,8 @@ module.exports = (_env, options) => ({
       {
         test: /\.scss$/,
         use: [
-          // 'style-loader',
-          MiniCssExtractPlugin.loader,
+          'style-loader',
+          // MiniCssExtractPlugin.loader,
           'css-loader',
           'postcss-loader',
           'sass-loader',
