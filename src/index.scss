@@ -16,6 +16,10 @@ html, body, #root {
   @apply h-full m-0 overflow-hidden;
 }
 
+* {
+  @apply select-none;
+}
+
 .button-container {
   @apply h-1/2;
 }
@@ -70,7 +74,7 @@ html, body, #root {
 }
 
 .modal {
-  @apply bottom-0 w-full overflow-auto sm:absolute h-1/2 sm:h-auto sm:overflow-visible;
+  @apply bottom-0 w-full overflow-auto cursor-move sm:absolute h-1/2 sm:h-auto sm:overflow-visible;
   @screen sm {
     width: 360px;
   }
