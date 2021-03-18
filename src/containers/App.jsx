@@ -9,7 +9,7 @@ const App = () => {
       <div className="button-container">
         <button type="button">open</button>
       </div>
-      <Modal>
+      <Modal initTop={200} initLeft={300} id="cal">
         <Calculator />
       </Modal>
     </>
