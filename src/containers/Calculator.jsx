@@ -1,9 +1,10 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDigit, setOp, doFn } from '../actions/calculator';
 
 const buttons = [
-  { text: 'AC', color: 'gray', type: 'fun' },
-  { text: '+/-', color: 'gray', type: 'fun' },
-  { text: '%', color: 'gray', type: 'fun' },
+  { text: 'AC', color: 'gray', type: 'fn' },
+  { text: '+/-', color: 'gray', type: 'fn' },
+  { text: '%', color: 'gray', type: 'fn' },
   { text: '/', color: 'blue', type: 'op' },
   { text: '7', color: 'black', type: 'digit' },
   { text: '8', color: 'black', type: 'digit' },
@@ -30,15 +31,25 @@ const Button = ({ text, color, handler }) => (
 
 const Calculator = () => {
   const calculator = useSelector((state) => state.calculator);
-  console.log(calculator);
+  const dispatch = useDispatch();
+  const handleOnClick = (value, type) => {
+    const actionMap = {
+      digit: setDigit,
+      op: setOp,
+      fn: doFn,
+    };
+    dispatch(actionMap[type](value));
+  };
   return (
     <div className="calculator">
-      <div className="calculator-screen">screen</div>
+      <div className="calculator-screen">{calculator.firstNum}</div>
       <div className="calculator-body">
         {
-        buttons.map(({ text, color, helf }) => (
+        buttons.map(({
+          text, color, helf, type,
+        }) => (
           <div className={`calculator-cell ${helf === true ? 'helf' : ''}`} key={text}>
-            <Button color={color} text={text} />
+            <Button color={color} text={text} handler={() => handleOnClick(text, type)} />
           </div>
         ))
       }

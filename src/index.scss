@@ -85,7 +85,7 @@ html, body, #root {
 }
 
 .modal {
-  @apply w-full overflow-auto cursor-move sm:absolute h-1/2 sm:h-auto sm:overflow-visible;
+  @apply w-full overflow-auto sm:cursor-move sm:absolute h-1/2 sm:h-auto sm:overflow-visible ;
   @screen sm {
     width: 360px;
   }
