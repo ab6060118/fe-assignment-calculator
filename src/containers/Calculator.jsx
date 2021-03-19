@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 const buttons = [
   { text: 'AC', color: 'gray', type: 'fun' },
   { text: '+/-', color: 'gray', type: 'fun' },
@@ -22,25 +24,27 @@ const buttons = [
   { text: '=', color: 'blue', type: 'op' },
 ];
 
-const Button = ({
-  text, color, handler, width,
-}) => (
+const Button = ({ text, color, handler }) => (
   <button type="button" className={`${color} calculator-button`} onClick={handler}>{text}</button>
 );
 
-const Calculator = () => (
-  <div className="calculator">
-    <div className="calculator-screen">screen</div>
-    <div className="calculator-body">
-      {
+const Calculator = () => {
+  const calculator = useSelector((state) => state.calculator);
+  console.log(calculator);
+  return (
+    <div className="calculator">
+      <div className="calculator-screen">screen</div>
+      <div className="calculator-body">
+        {
         buttons.map(({ text, color, helf }) => (
           <div className={`calculator-cell ${helf === true ? 'helf' : ''}`} key={text}>
             <Button color={color} text={text} />
           </div>
         ))
       }
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Calculator;

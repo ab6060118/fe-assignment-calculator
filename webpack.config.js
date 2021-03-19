@@ -1,4 +1,6 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -30,8 +32,8 @@ module.exports = (_env, options) => ({
       {
         test: /\.scss$/,
         use: [
-          'style-loader',
-          // MiniCssExtractPlugin.loader,
+          // 'style-loader',
+          MiniCssExtractPlugin.loader,
           'css-loader',
           'postcss-loader',
           'sass-loader',
@@ -42,13 +44,19 @@ module.exports = (_env, options) => ({
   plugins: [
     new CleanWebpackPlugin({ verbose: true }),
     new MiniCssExtractPlugin({
-      filename: '[hash].css',
+      filename: '[fullhash].css',
     }),
     new HtmlWebpackPlugin({
       template: `${__dirname}/src/index.html`,
       filename: 'index.html',
     }),
   ],
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin(),
+      new CssMinimizerPlugin(),
+    ],
+  },
   devServer: {
     host: '0.0.0.0',
     contentBase: './',

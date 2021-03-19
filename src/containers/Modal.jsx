@@ -1,69 +1,99 @@
 import {
-  useCallback, useEffect, useRef, useState,
+  useCallback, useMemo, useRef, useState,
 } from 'react';
 
+const space = 50;
+
 const Modal = ({
-  children, initTop, initLeft, id,
+  children,
+  closeFn,
+  initLeft,
+  initTop,
+  show,
 }) => {
-  const modelEl = useRef(undefined);
-  const [{ top, left }, setPosition] = useState({
+  const modalEl = useRef(undefined);
+  const [isMoving, setIsMoving] = useState(false);
+  const [position, setPosition] = useState({
     top: initTop || 0,
     left: initLeft || 0,
+  });
+  const [originPosition, setOriginPosition] = useState({
+    top: 0,
+    left: 0,
   });
   const [mouseDownPosition, setMouseDownPosition] = useState({
     top: 0,
     left: 0,
   });
 
-  const handleMoving = useCallback((e) => {
-    if (!modelEl) return;
+  const handleMoving = useCallback(({ pageX, pageY }) => {
+    const { left: mLeft, top: mTop } = mouseDownPosition;
+    const { left: oLeft, top: oTop } = originPosition;
+    const { innerWidth, innerHeight } = window;
+    const { width, height } = modalEl.current.getBoundingClientRect();
+    let top = oTop + pageY - mTop;
+    let left = oLeft + pageX - mLeft;
 
-    console.log(mouseDownPosition);
+    if (top < space - height) top = space - height;
+    if (top > innerHeight - space) top = innerHeight - space;
+    if (left < space - width) left = space - width;
+    if (left > innerWidth - space) left = innerWidth - space;
 
-    // const { pageX, pageY } = e;
-    // const {
-    // elLeft: left, top, width, height,
-    // } = modelEl.current.getBoundingClientRect();
-
-    // console.log(pageX, pageY, modelEl.current.getBoundingClientRect(), mouseDownPosition);
-    // setPosition({
-    // top: kkkkk
-    // })
-  }, [modelEl, mouseDownPosition]);
-
-  console.log(handleMoving);
+    setPosition({
+      top,
+      left,
+    });
+  }, [modalEl, mouseDownPosition, originPosition]);
 
   const handleMouseUp = useCallback(() => {
-    document.removeEventListener('mousemove', handleMoving);
-    document.removeEventListener('mouseup', handleMouseUp);
+    setIsMoving(false);
   }, []);
 
-  const handleMouseDown = useCallback((e) => {
-    const { pageX, pageY } = e;
-    console.log(pageX);
+  const handleMouseDown = useCallback(({ pageX, pageY }) => {
+    const { left, top } = modalEl.current.getBoundingClientRect();
+    setIsMoving(true);
     setMouseDownPosition({
       top: pageY,
       left: pageX,
     });
-    document.addEventListener('mousemove', handleMoving);
-    document.addEventListener('mouseup', handleMouseUp);
+    setOriginPosition({
+      top,
+      left,
+    });
   }, []);
 
-  useEffect(() => {
-    modelEl.current.addEventListener('mousedown', handleMouseDown);
-    return () => {
-      modelEl.current.removeEventListener('mousedown', handleMouseDown);
-    };
-  }, []);
+  const handleClose = useCallback(({ target }) => {
+    if (!modalEl.current.contains(target)) closeFn();
+  }, [modalEl]);
+
+  useMemo(() => {
+    if (isMoving) {
+      document.addEventListener('mousemove', handleMoving);
+      document.addEventListener('mouseup', handleMouseUp);
+    } else {
+      document.removeEventListener('mousemove', handleMoving);
+      document.removeEventListener('mouseup', handleMouseUp);
+    }
+  }, [isMoving, handleMoving]);
+
+  useMemo(() => {
+    if (show) {
+      document.addEventListener('mousedown', handleClose);
+    } else {
+      document.removeEventListener('mousedown', handleClose);
+    }
+  }, [show]);
+
+  if (!show) return null;
 
   return (
     <div
       className="modal"
-      ref={modelEl}
-      id={id}
+      ref={modalEl}
+      onMouseDown={handleMouseDown}
       style={{
-        top,
-        left,
+        top: position.top,
+        left: position.left,
       }}
     >
       {children}

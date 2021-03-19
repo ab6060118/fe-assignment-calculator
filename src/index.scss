@@ -22,16 +22,45 @@ html, body, #root {
 
 .button-container {
   @apply h-1/2;
+
+  button {
+    @apply p-2 bg-blue-400 rounded shadow;
+    outline: none !important;
+    &:hover {
+      @apply bg-blue-300;
+    }
+    &:active {
+      @apply bg-blue-500;
+    }
+    &:disabled {
+      @apply opacity-50;
+    }
+  }
 }
 
 .calculator {
   @apply flex flex-col w-full p-3;
   background: linear-gradient(180deg, #84BAFF, #0B0E1C);
-
   .calculator-screen {
     @apply h-16 p-2 text-4xl text-right text-white md:text-5xl md:h-20;
   }
-
+  .calculator-button {
+    @apply text-4xl text-center rounded-full md:text-5xl;
+    outline: none !important;
+    &.gray {
+      @apply to-black;
+      @include hover-active(#AFAFAFAF);
+      color: black;
+    }
+    &.blue {
+      @apply text-white;
+      @include hover-active(#3091FD);
+    }
+    &.black {
+      @apply text-white;
+      @include hover-active(#333333);
+    }
+  }
   .calculator-body {
     @apply flex flex-wrap;
     .calculator-cell {
@@ -53,28 +82,10 @@ html, body, #root {
       }
     }
   }
-
-  .calculator-button {
-    @apply text-4xl text-center rounded-full md:text-5xl;
-    outline: none !important;
-    &.gray {
-      @apply to-black;
-      @include hover-active(#AFAFAFAF);
-      color: black;
-    }
-    &.blue {
-      @apply text-white;
-      @include hover-active(#3091FD);
-    }
-    &.black {
-      @apply text-white;
-      @include hover-active(#333333);
-    }
-  }
 }
 
 .modal {
-  @apply bottom-0 w-full overflow-auto cursor-move sm:absolute h-1/2 sm:h-auto sm:overflow-visible;
+  @apply w-full overflow-auto cursor-move sm:absolute h-1/2 sm:h-auto sm:overflow-visible;
   @screen sm {
     width: 360px;
   }

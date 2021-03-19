@@ -1,5 +1,7 @@
 const initState = {
-  test: [],
+  firstNum: 0,
+  secondNum: undefined,
+  op: undefined,
 };
 
 const calculator = (state = initState, action) => {
