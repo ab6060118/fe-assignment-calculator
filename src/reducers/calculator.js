@@ -1,6 +1,7 @@
 const initState = {
-  firstNum: '0',
-  secondNum: undefined,
+  display: '0',
+  value: undefined,
+  keepDisplay: true,
   op: undefined,
 };
 
@@ -9,7 +10,7 @@ const calculator = (state = initState, action) => {
     case 'UPDATE_DATA':
       return {
         ...state,
-        [action.key]: action.value,
+        ...action.value,
       };
     case 'CAL_RESET':
       return initState;
