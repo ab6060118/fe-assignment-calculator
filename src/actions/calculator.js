@@ -1,40 +1,48 @@
+const updateData = (value) => ({ type: 'UPDATE_DATA', value });
+
 const setDot = () => (dispatch, getState) => {
-  const { display, op } = getState().calculator;
-  console.log('setDot', getState().calculator);
-  if (display.includes('.')) return;
-  dispatch({
-    type: 'UPDATE_DATA',
-    value: {
-      op: undefined,
-      display: `${display}.`,
+  const { display, op, keepDisplay } = getState().calculator;
+  if (op && !keepDisplay) {
+    dispatch(updateData({
+      display: '0.',
+      value: display,
       keepDisplay: true,
-    },
-  });
+    }));
+    return;
+  }
+
+  if (display.includes('.')) return;
+
+  dispatch(updateData({
+    display: `${display}.`,
+    keepDisplay: true,
+  }));
 };
 
 export const setDigit = (digit) => (dispatch, getState) => {
   const { display, keepDisplay } = getState().calculator;
-  if (digit === '.') return dispatch(setDot());
+  if (digit === '.') {
+    dispatch(setDot());
+    return;
+  }
   if (keepDisplay) {
-    dispatch({
-      type: 'UPDATE_DATA',
-      value: {
+    dispatch(updateData(
+      {
         display: display === '0' ? digit : `${display}${digit}`,
       },
-    });
-  } else {
-    dispatch({
-      type: 'UPDATE_DATA',
-      value: {
-        display: digit,
-        keepDisplay: true,
-      },
-    });
+    ));
+    return;
   }
+  dispatch(updateData({
+    display: digit,
+    keepDisplay: true,
+  }));
 };
 
 export const setOp = (operation) => (dispatch, getState) => {
-  const { value, display, op } = getState().calculator;
+  const {
+    value, display, op, keepDisplay,
+  } = getState().calculator;
   const opFnMap = {
     '+': (first, last) => first + last,
     '-': (first, last) => first - last,
@@ -42,31 +50,43 @@ export const setOp = (operation) => (dispatch, getState) => {
     x: (first, last) => first * last,
   };
 
-  if (operation === '=' && op) {
-    console.log(value, display);
-    return dispatch({
-      type: 'UPDATE_DATA',
-      value: {
-        op: undefined,
-        value: undefined,
-        display: opFnMap[op](parseFloat(value), parseFloat(display)).toString(),
-        keepDisplay: false,
-      },
-    });
-  }
-
   if (operation === '=' && !op) return;
-
-  dispatch({
-    type: 'UPDATE_DATA',
-    value: {
-      op: operation,
-      value: display,
+  if (operation === '=' && op) {
+    dispatch(updateData({
+      op: undefined,
+      display: opFnMap[op](parseFloat(value), parseFloat(display)).toString(),
       keepDisplay: false,
-    },
-  });
+    }));
+    return;
+  }
+  if (op && operation && keepDisplay) {
+    const result = opFnMap[op](parseFloat(value), parseFloat(display)).toString();
+    dispatch(updateData({
+      op: operation,
+      value: result,
+      display: result,
+      keepDisplay: false,
+    }));
+    return;
+  }
+  dispatch(updateData({
+    op: operation,
+    value: display,
+    keepDisplay: false,
+  }));
 };
 
-export const doFn = (value) => (dispatch, getState) => {
-  if (value === 'AC') dispatch({ type: 'CAL_RESET' });
+export const doFn = (v) => (dispatch, getState) => {
+  const { display } = getState().calculator;
+  if (v === 'AC') dispatch({ type: 'CAL_RESET' });
+  if (v === '+/-') {
+    dispatch(updateData({
+      display: (parseFloat(display) * -1).toString(),
+    }));
+  }
+  if (v === '%') {
+    dispatch(updateData({
+      display: (parseFloat(display) * 0.01).toString(),
+    }));
+  }
 };

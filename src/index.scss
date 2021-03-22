@@ -42,7 +42,7 @@ html, body, #root {
   @apply flex flex-col w-full p-3;
   background: linear-gradient(180deg, #84BAFF, #0B0E1C);
   .calculator-screen {
-    @apply h-16 p-2 text-4xl text-right text-white md:text-5xl md:h-20;
+    @apply h-16 p-2 overflow-auto text-4xl text-right text-white md:text-5xl md:h-20;
   }
   .calculator-button {
     @apply text-4xl text-center rounded-full md:text-5xl;

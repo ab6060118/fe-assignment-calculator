@@ -40,7 +40,6 @@ const Calculator = () => {
     };
     dispatch(actionMap[type](value));
   };
-  console.log(calculator);
   return (
     <div className="calculator">
       <div className="calculator-screen">{calculator.display}</div>
