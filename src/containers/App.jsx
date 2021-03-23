@@ -3,7 +3,7 @@ import Calculator from './Calculator';
 import Modal from './Modal';
 
 const App = () => {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   return (
     <>
       <div className="button-container">

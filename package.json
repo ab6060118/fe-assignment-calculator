@@ -8,7 +8,8 @@
     "dev": "NODE_ENV=development webpack serve --mode development",
     "build": "NODE_ENV=production webpack --mode production",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "server": "http-server dist -p8080"
   },
   "keywords": [],
   "author": "",
@@ -40,6 +41,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "gh-pages": "^3.1.0",
     "html-webpack-plugin": "^5.3.1",
+    "http-server": "^0.12.3",
     "mini-css-extract-plugin": "^1.3.9",
     "postcss-loader": "^5.2.0",
     "sass": "^1.32.8",
